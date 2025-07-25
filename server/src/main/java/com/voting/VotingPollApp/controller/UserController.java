@@ -1,6 +1,7 @@
 package com.voting.VotingPollApp.controller;
 
 import com.voting.VotingPollApp.UserService.UserService;
+import com.voting.VotingPollApp.config.JwtUtil;
 import com.voting.VotingPollApp.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,25 +25,51 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register")
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping("/registerUser")
     public ResponseEntity<?> addUser(@RequestBody UserModel userModel){
         return userService.addUser(userModel);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<?> addAdmin(@RequestBody UserModel userModel){return userService.addAdmin(userModel);}
+
+    @PostMapping("/loginUser")
     public ResponseEntity<?> getUser(@RequestBody UserModel userModel){
         Authentication authentication=authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userModel.getUserName(),userModel.getPassword())
         );
-        if(authentication.isAuthenticated()){
+        if(authentication.isAuthenticated() && "USER".equals(userModel.getRole())){
             UserDetails userDetails=userService.loadUserByUsername(userModel.getUserName());
+            String token=jwtUtil.generateToken(userDetails);
             Map<String,String> map=new HashMap<>();
             map.put("user_name",userDetails.getUsername());
+            map.put("token",token);
             return ResponseEntity.ok(map);
         }else {
             Map<String,String> map=new HashMap<>();
             map.put("message","User is not authorized");
-            return ResponseEntity.status(401).body(map);
+            return ResponseEntity.status(403).body(map);
+        }
+    }
+    @PostMapping("/loginAdmin")
+    public ResponseEntity<?> getAdmin(@RequestBody UserModel userModel){
+        Authentication authentication=authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userModel.getUserName(),userModel.getPassword())
+        );
+        if(authentication.isAuthenticated() && "ADMIN".equals(userModel.getRole())){
+            UserDetails userDetails=userService.loadUserByUsername(userModel.getUserName());
+            String token=jwtUtil.generateToken(userDetails);
+            Map<String,String> map=new HashMap<>();
+            map.put("user_name",userDetails.getUsername());
+            map.put("token",token);
+            return ResponseEntity.ok(map);
+        }else {
+            Map<String,String> map=new HashMap<>();
+            map.put("message","User is not authorized");
+            return ResponseEntity.status(403).body(map);
         }
     }
 }

@@ -24,8 +24,25 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> addUser(UserModel userModel){
         try{
-            if(userModel.getRole()=="ADMIN"){
+            if(userModel.getRole().equals("ADMIN")){
                 throw new Exception("Adding admin in user");
+            }
+            Map<String,String> message=new HashMap<>();
+            userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
+            userRepo.save(userModel);
+            message.put("message","Account Created Successfully");
+            return ResponseEntity.status(201).body(message);
+        }catch (Exception e){
+            Map<String,String> message=new HashMap<>();
+            message.put("message",e.getMessage());
+            return ResponseEntity.status(400).body(message);
+        }
+    }
+
+    public ResponseEntity<?> addAdmin(UserModel userModel){
+        try{
+            if(userModel.getRole().equals("USER")){
+                throw new Exception("Adding user in admin");
             }
             Map<String,String> message=new HashMap<>();
             userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
@@ -41,14 +58,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel userModel=userRepo.findUserByUserName(username,"USER");
+        UserModel userModel=userRepo.findUserByUserName(username);
         if(userModel==null){
             throw new UsernameNotFoundException("User not found with username"+username);
         }
         return User.builder()
                 .username(userModel.getUserName())
                 .password(userModel.getPassword())
-                .roles("USER")
+                .roles(userModel.getRole())
                 .build();
     }
 }
