@@ -44,8 +44,11 @@ public class UserController {
         if(authentication.isAuthenticated() && "USER".equals(userModel.getRole())){
             UserDetails userDetails=userService.loadUserByUsername(userModel.getUserName());
             String token=jwtUtil.generateToken(userDetails);
+            Integer id=userService.getUserId(userModel);
             Map<String,String> map=new HashMap<>();
             map.put("user_name",userDetails.getUsername());
+            map.put("user_id",id.toString());
+            map.put("e_mail",userModel.getE_mail());
             map.put("token",token);
             return ResponseEntity.ok(map);
         }else {
@@ -62,8 +65,11 @@ public class UserController {
         if(authentication.isAuthenticated() && "ADMIN".equals(userModel.getRole())){
             UserDetails userDetails=userService.loadUserByUsername(userModel.getUserName());
             String token=jwtUtil.generateToken(userDetails);
+            Integer id=userService.getUserId(userModel);
             Map<String,String> map=new HashMap<>();
             map.put("user_name",userDetails.getUsername());
+            map.put("user_id",id.toString());
+            map.put("e_mail",userModel.getE_mail());
             map.put("token",token);
             return ResponseEntity.ok(map);
         }else {

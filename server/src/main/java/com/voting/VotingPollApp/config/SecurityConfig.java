@@ -47,22 +47,24 @@ public class SecurityConfig {
         return source;
     }
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,AuthenticationProvider authenticationProvider) throws Exception{
-        httpSecurity.csrf(csrf->csrf.disable())
-                .cors(cors->corsConfigurationSource())
-                .authorizeHttpRequests(
-                        auth->auth
-                                .requestMatchers("/auth/loginUser","/auth/loginAdmin","/auth/registerUser","/auth/registerAdmin").permitAll()
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/api/**").authenticated()
-                                .anyRequest().authenticated()
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationProvider authenticationProvider, CorsConfigurationSource corsConfigurationSource) throws Exception {
+        httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource)) // <-- proper CORS config
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/loginUser", "/auth/loginAdmin", "/auth/registerUser", "/auth/registerAdmin").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtConfig, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .httpBasic(Customizer.withDefaults());
+
         return httpSecurity.build();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService){
         DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();

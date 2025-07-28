@@ -55,7 +55,9 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.status(400).body(message);
         }
     }
-
+    public Integer getUserId(UserModel userModel){
+        return userRepo.findUserId(userModel.getUserName());
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserModel userModel=userRepo.findUserByUserName(username);
