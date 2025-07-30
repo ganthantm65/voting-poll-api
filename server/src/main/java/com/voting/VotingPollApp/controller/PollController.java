@@ -66,13 +66,31 @@ public class PollController {
 
         try {
             optionService.deleteOptionsByPollId(poll.getPoll_id());
-            System.out.println("Poll ID"+poll.getPoll_id());
             Poll updatedPoll = pollService.updatePoll(poll);
             optionService.addOptions(poll.getOptionList(),poll.getPoll_id());
             return ResponseEntity.ok(updatedPoll);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Failed to update poll: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateStatus")
+    public ResponseEntity<?> updateStatus(@RequestBody Poll poll) {
+        try {
+            if (poll.getPoll_id() == 0 || poll.getStatus() == null) {
+                return ResponseEntity.badRequest().body("Poll ID or Status is missing.");
+            }
+
+            int updated = pollService.updatePollStatus(poll);
+            if (updated > 0) {
+                return ResponseEntity.ok("Status updated successfully.");
+            } else {
+                return ResponseEntity.status(404).body("Poll not found.");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }
     }
 

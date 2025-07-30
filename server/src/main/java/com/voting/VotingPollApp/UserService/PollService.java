@@ -33,7 +33,12 @@ public class PollService {
 
         return polls;
     }
-
+    public int updatePollStatus(Poll poll){
+        if(!pollRepo.existsById(poll.getPoll_id())){
+            throw new IllegalArgumentException("Invalid poll ID");
+        }
+        return pollRepo.updatePollStatus(poll.getStatus(), poll.getPoll_id());
+    }
     public Poll updatePoll(Poll poll){
         if (!pollRepo.existsById(poll.getPoll_id())) {
             throw new IllegalArgumentException("Invalid poll ID.");

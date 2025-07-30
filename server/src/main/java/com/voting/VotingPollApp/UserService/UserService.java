@@ -1,6 +1,7 @@
 package com.voting.VotingPollApp.UserService;
 
 import com.voting.VotingPollApp.model.UserModel;
+import com.voting.VotingPollApp.model.UsersDTO;
 import com.voting.VotingPollApp.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,7 +58,10 @@ public class UserService implements UserDetailsService {
         }
     }
     public Integer getUserId(UserModel userModel){
-        return userRepo.findUserId(userModel.getUserName());
+        return userRepo.findUserName(userModel.getUserName());
+    }
+    public List<UsersDTO> getUsers(){
+        return userRepo.getUsers();
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

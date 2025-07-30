@@ -3,6 +3,7 @@ package com.voting.VotingPollApp.controller;
 import com.voting.VotingPollApp.UserService.UserService;
 import com.voting.VotingPollApp.config.JwtUtil;
 import com.voting.VotingPollApp.model.UserModel;
+import com.voting.VotingPollApp.model.UsersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin
@@ -35,6 +37,9 @@ public class UserController {
 
     @PostMapping("/registerAdmin")
     public ResponseEntity<?> addAdmin(@RequestBody UserModel userModel){return userService.addAdmin(userModel);}
+
+    @GetMapping("/getUsers")
+    public List<UsersDTO> getUsers(){return userService.getUsers();}
 
     @PostMapping("/loginUser")
     public ResponseEntity<?> getUser(@RequestBody UserModel userModel){
