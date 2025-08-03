@@ -1,6 +1,6 @@
 package com.voting.VotingPollApp.controller;
 
-import com.voting.VotingPollApp.UserService.UserService;
+import com.voting.VotingPollApp.service.UserService;
 import com.voting.VotingPollApp.config.JwtUtil;
 import com.voting.VotingPollApp.model.UserModel;
 import com.voting.VotingPollApp.model.UsersDTO;
@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -59,7 +58,7 @@ public class UserController {
         }else {
             Map<String,String> map=new HashMap<>();
             map.put("message","User is not authorized");
-            return ResponseEntity.status(403).body(map);
+            return ResponseEntity.status(500).body(map);
         }
     }
     @PostMapping("/loginAdmin")
@@ -80,7 +79,7 @@ public class UserController {
         }else {
             Map<String,String> map=new HashMap<>();
             map.put("message","User is not authorized");
-            return ResponseEntity.status(403).body(map);
+            return ResponseEntity.status(500).body(map);
         }
     }
 }

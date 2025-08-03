@@ -10,7 +10,7 @@ import java.util.List;
 public interface VoteRepo extends JpaRepository<Vote, Integer> {
 
     @Query("SELECT new com.voting.VotingPollApp.model.VoteDTO(" +
-            "v.poll.question, v.options.name, v.userModel.userName, v.vote_id) " +
+            "v.poll.question, v.options.name, v.userModel.userName,v.userModel.user_id, v.vote_id) " +
             "FROM Vote v")
     List<VoteDTO> getAllVotesAsDTO();
 }

@@ -1,4 +1,4 @@
-package com.voting.VotingPollApp.UserService;
+package com.voting.VotingPollApp.service;
 
 import com.voting.VotingPollApp.model.Options;
 import com.voting.VotingPollApp.model.Poll;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 
 @Service

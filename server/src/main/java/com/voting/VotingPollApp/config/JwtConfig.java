@@ -1,6 +1,6 @@
 package com.voting.VotingPollApp.config;
 
-import com.voting.VotingPollApp.UserService.UserService;
+import com.voting.VotingPollApp.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

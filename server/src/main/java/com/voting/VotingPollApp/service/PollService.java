@@ -1,4 +1,4 @@
-package com.voting.VotingPollApp.UserService;
+package com.voting.VotingPollApp.service;
 
 import com.voting.VotingPollApp.model.Options;
 import com.voting.VotingPollApp.model.Poll;
@@ -23,7 +23,18 @@ public class PollService {
         return pollRepo.save(poll);
     }
 
-    public List<Poll> getAllPoll(int user_id) {
+    public List<Poll> getAllPolls(){
+        List<Poll> polls = pollRepo.findAll();
+
+        for (Poll poll : polls) {
+            List<Options> choiceNames = optionsRepo.findOptionByPollId(poll.getPoll_id());
+            poll.setOptionList(choiceNames);
+        }
+
+        return polls;
+    }
+
+    public List<Poll> getPoll(int user_id) {
         List<Poll> polls = pollRepo.findByUserId(user_id);
 
         for (Poll poll : polls) {

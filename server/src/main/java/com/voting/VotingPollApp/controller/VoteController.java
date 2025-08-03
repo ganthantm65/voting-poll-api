@@ -1,6 +1,6 @@
 package com.voting.VotingPollApp.controller;
 
-import com.voting.VotingPollApp.UserService.VoteService;
+import com.voting.VotingPollApp.service.VoteService;
 import com.voting.VotingPollApp.model.Vote;
 import com.voting.VotingPollApp.model.VoteDTO;
 import org.springframework.beans.factory.annotation.Autowired;

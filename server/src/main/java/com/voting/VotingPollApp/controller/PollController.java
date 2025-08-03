@@ -1,7 +1,7 @@
 package com.voting.VotingPollApp.controller;
 
-import com.voting.VotingPollApp.UserService.OptionService;
-import com.voting.VotingPollApp.UserService.PollService;
+import com.voting.VotingPollApp.service.OptionService;
+import com.voting.VotingPollApp.service.PollService;
 import com.voting.VotingPollApp.model.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -93,11 +93,19 @@ public class PollController {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }
     }
-
-    @GetMapping("/getPolls")
-    public ResponseEntity<?> getAllPolls(@RequestParam int user_id) {
+    @GetMapping("/getAllPolls")
+    public ResponseEntity<?> getAllPolls(){
         try {
-            List<Poll> polls = pollService.getAllPoll(user_id);
+            List<Poll> polls = pollService.getAllPolls();
+            return ResponseEntity.ok(polls);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to fetch polls: " + e.getMessage());
+        }
+    }
+    @GetMapping("/getPolls")
+    public ResponseEntity<?> getPolls(@RequestParam int user_id) {
+        try {
+            List<Poll> polls = pollService.getPoll(user_id);
             return ResponseEntity.ok(polls);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to fetch polls: " + e.getMessage());

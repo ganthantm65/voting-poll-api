@@ -1,4 +1,4 @@
-package com.voting.VotingPollApp.UserService;
+package com.voting.VotingPollApp.service;
 
 import com.voting.VotingPollApp.model.UserModel;
 import com.voting.VotingPollApp.model.UsersDTO;
